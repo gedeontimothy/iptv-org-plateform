@@ -29,12 +29,12 @@
 
   let isStreamExpanded = $state(false)
 
-  let hasStreams = $derived(channel.streams.length > 0)
+  let hasStreams = $state(channel.streams.length > 0)
 
   let cachedStreams : Stream.Type[] | null = $state(null)
 
   let streamButtonClass = $derived([
-    "text-sm text-gray-400 inline-flex space-x-1 flex items-center",
+    "text-sm text-gray-400 space-x-1 flex items-center",
     hasStreams
       ? 'text-green-500 dark:text-green-400 hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer'
       : 'text-red-400',
@@ -112,6 +112,8 @@
 
         if(cachedStreams && cachedStreams.length > 0)
           isStreamExpanded = true
+        else
+          hasStreams = false
 
         isLoadingStreams = false
       }
@@ -240,6 +242,8 @@
           <button
             onclick={handleStreamExpansion}
             class={streamButtonClass}
+            class:inline-flex={!downloadMode.isEnabled}
+            class:hidden={downloadMode.isEnabled}
             title="Streams"
           >
             {#if isLoadingStreams}
